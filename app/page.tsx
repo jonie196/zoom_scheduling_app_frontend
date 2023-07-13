@@ -1,4 +1,7 @@
 import Chat from './ChatsList'
+import Link from 'next/link'
+import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
 
 
 export default function Home() {
@@ -11,7 +14,9 @@ export default function Home() {
         <h2 className="text-2xl mb-4">Conversations</h2>
       </div>
       <Chat />
-      <p className='text-center border-solid border-2 border-green-500 rounded p-2' >Create New Chat +</p>
+      <Link href={"/create"}>
+        <Button variant="outlined">Create new Chat</Button>
+      </Link>
     </>
   )
 }

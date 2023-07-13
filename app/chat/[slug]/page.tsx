@@ -2,8 +2,8 @@ import Link from 'next/link';
 // Icons
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+// Components
+import SendMessage from './SendMessage';
 
 const Page = (props: any) => {
   const chatId = props.params.slug
@@ -35,7 +35,7 @@ const Page = (props: any) => {
         type: 'text',
       },
       {
-        id: 2,
+        id: 3,
         createdAt: 1234567899,
         content: 'test message',
         senderName: 'Wendy Darling',
@@ -43,7 +43,7 @@ const Page = (props: any) => {
         type: 'text',
       },
       {
-        id: 2,
+        id: 4,
         createdAt: 1234567899,
         content: 'test message messagemes sagemessagemes sagemessagem essagemessa gemessagemessage',
         senderName: 'Wendy Darling',
@@ -51,7 +51,7 @@ const Page = (props: any) => {
         type: 'text',
       },
       {
-        id: 2,
+        id: 5,
         createdAt: 1234567899,
         content: 'test message',
         senderName: 'Wendy Darling',
@@ -59,7 +59,7 @@ const Page = (props: any) => {
         type: 'text',
       },
       {
-        id: 2,
+        id: 6,
         createdAt: 1234567899,
         content: 'test message',
         senderName: 'Wendy Darling',
@@ -74,7 +74,7 @@ const Page = (props: any) => {
       <div>
         <Link href={`/`}>
           <div className='flex items-center absolute top-6 left-6'>
-            <ArrowBackIosIcon />
+            <ArrowBackIosIcon color="primary" />
           </div>
         </Link>
         <h1 className="text-4xl font-bold text-center">{data.title}</h1>
@@ -103,16 +103,7 @@ const Page = (props: any) => {
           }
         </div>
         {/* Input */}
-        <div className='flex gap-2 mt-8'>
-          <TextField
-            id="outlined-multiline-flexible"
-            label="Message"
-            multiline
-            maxRows={4}
-            value-='Test'
-          />
-          <Button variant="outlined">Send</Button>
-        </div>
+        <SendMessage />
       </div>
     </>
   )
