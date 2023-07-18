@@ -5,70 +5,18 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // Components
 import SendMessage from './SendMessage';
 
-const Page = (props: any) => {
-  const chatId = props.params.slug
-  // fetch /conversation/:id
-  const data = {
-    id: 1,
-    title: 'Test Chat Title',
-    senderName: 'Peter Pan',
-    senderId: 1,
-    partcipants: [
-      "Pater Pan",
-      "Wendy Darling",
-    ],
-    messages: [
-      {
-        id: 1,
-        createdAt: 1234567890,
-        content: 'test message',
-        senderName: 'Peter Pan',
-        senderId: 1,
-        type: 'text',
-      },
-      {
-        id: 2,
-        createdAt: 1234567899,
-        content: 'test message',
-        senderName: 'Wendy Darling',
-        senderId: 2,
-        type: 'text',
-      },
-      {
-        id: 3,
-        createdAt: 1234567899,
-        content: 'test message',
-        senderName: 'Wendy Darling',
-        senderId: 2,
-        type: 'text',
-      },
-      {
-        id: 4,
-        createdAt: 1234567899,
-        content: 'test message messagemes sagemessagemes sagemessagem essagemessa gemessagemessage',
-        senderName: 'Wendy Darling',
-        senderId: 2,
-        type: 'text',
-      },
-      {
-        id: 5,
-        createdAt: 1234567899,
-        content: 'test message',
-        senderName: 'Wendy Darling',
-        senderId: 2,
-        type: 'text',
-      },
-      {
-        id: 6,
-        createdAt: 1234567899,
-        content: 'test message',
-        senderName: 'Wendy Darling',
-        senderId: 2,
-        type: 'text',
-      },
-    ],
-    name: 'Test Chat Title',
-  }
+const getConversation = async (id: string) => {
+
+  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + `/conversations/${id}`, { next: { revalidate: 0 } });
+  const data = await res.json();
+  return data.conversation;
+}
+
+const Page = async (props: any) => {
+  const id = props.params.slug as string
+  const conversation = await getConversation(id)
+  console.log(conversation)
+
   return (
     <>
       <div>
@@ -77,12 +25,12 @@ const Page = (props: any) => {
             <ArrowBackIosIcon color="primary" />
           </div>
         </Link>
-        <h1 className="text-4xl font-bold text-center">{data.title}</h1>
+        <h1 className="text-4xl font-bold text-center">{conversation.title}</h1>
       </div>
       {/* Chat */}
       <div>
-        <div className='flex flex-col gap-4'>
-          {data.messages.map((message: any) => {
+        <div className='flex flex-col gap-4 overflow-auto'>
+          {conversation.messages?.map((message: any) => {
             return (
               <div key={message.id} className='self-start'>
                 <div className='flex gap-2'>
@@ -92,8 +40,8 @@ const Page = (props: any) => {
                     <div>{message.content}</div>
                     {/* created at */}
                     <div className="text-slate-400 text-xs">
-                      <span>{new Date(message.createdAt * 1000).toLocaleTimeString()}</span>{' '}
-                      <span>{new Date(message.createdAt * 1000).toLocaleDateString()}</span>
+                      <span>{new Date(message.createdAt).toLocaleTimeString()}</span>{' '}
+                      <span>{new Date(message.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
                 </div>
@@ -103,7 +51,7 @@ const Page = (props: any) => {
           }
         </div>
         {/* Input */}
-        <SendMessage />
+        <SendMessage id={id} />
       </div>
     </>
   )

@@ -3,9 +3,10 @@ import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
-const SendMessage = () => {
+
+const SendMessage = ({ id }: { id: string }) => {
     const [message, setMessage] = useState('')
-    const sendMessage = () => {
+    const sendMessage = async () => {
         const content = message
         const senderId = 1
         let type = 'Text'
@@ -18,6 +19,15 @@ const SendMessage = () => {
         }
         // /conversation/:id/message
         // POST (content: String, senderId: Number, type: String)
+
+        const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + `/conversations/${id}/messages`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ content, senderId, type }),
+        });
+        window.location.reload();
     }
     return (
         <>
@@ -32,7 +42,10 @@ const SendMessage = () => {
                         setMessage(event.target.value)
                     }}
                 />
-                <Button variant="outlined" onClick={() => { sendMessage() }}>Send</Button>
+                <Button variant="outlined" onClick={() => {
+                    if (message === '') return
+                    sendMessage()
+                }}>Send</Button>
             </div>
         </>
     )

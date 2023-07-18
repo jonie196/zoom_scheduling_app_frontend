@@ -4,7 +4,10 @@ import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 
 
-export default function Home() {
+
+
+export default async function Home() {
+
   return (
     <>
       <h1 className="text-4xl font-bold text-center">

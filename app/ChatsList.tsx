@@ -1,27 +1,17 @@
 import Link from "next/link";
 import ChatIcon from '@mui/icons-material/Chat';
 
-export const Chats = () => {
-  const conversations = [ // use API: /conversations
-    {
-      id: 1,
-      title: 'Test Chat Title',
-      senderName: 'Peter Pan',
-      lastMessage: 'test message',
-    },
-    {
-      id: 2,
-      title: 'Test Chat Title',
-      senderName: 'Peter Pan',
-      lastMessage: 'test message',
-    },
-    {
-      id: 3,
-      title: 'Test Chat Title',
-      senderName: 'Peter Pan',
-      lastMessage: 'test message',
-    },
-  ];
+type ConversationData = { id: number; title: string; senderName: string; lastMessage: string }[];
+
+async function getConversations() {
+  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + "/conversations", { next: { revalidate: 0 } } );
+  const data = await res.json();
+  return data.conversations;
+}
+
+export const Chats = async () => {
+  const conversations: ConversationData = await getConversations();
+  console.log(conversations)
   return (
     <>
       <div className="w-full flex flex-col gap-2">
