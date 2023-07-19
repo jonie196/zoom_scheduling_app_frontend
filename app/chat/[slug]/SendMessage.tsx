@@ -7,8 +7,8 @@ import Button from '@mui/material/Button';
 
 const SendMessage = ({ id }: { id: string }) => {
     const [message, setMessage] = useState('')
-
-    const storedCode = localStorage.getItem('code');
+    const redirect_url = process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URI as string
+    const storedCode = localStorage.getItem('code') as string
     console.log(storedCode)
     const sendMessage = async () => {
         const content = message
@@ -44,7 +44,7 @@ const SendMessage = ({ id }: { id: string }) => {
             const formData = new URLSearchParams();
             formData.append('code', storedCode);
             formData.append('grant_type', 'authorization_code');
-            formData.append('redirect_uri', process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URI);
+            formData.append('redirect_uri', redirect_url);
 
             const res = await fetch(url, {
                 method: 'POST',
