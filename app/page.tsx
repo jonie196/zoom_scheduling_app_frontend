@@ -1,3 +1,5 @@
+'use client'
+import { useEffect } from 'react';
 import Chat from './ChatsList'
 import Link from 'next/link'
 import AddIcon from '@mui/icons-material/Add';
@@ -6,7 +8,17 @@ import Button from '@mui/material/Button';
 
 
 
-export default async function Home() {
+export default function Home(props: any) {
+
+  const code = props.searchParams.code as string
+
+  useEffect(() => {
+    if (!localStorage.getItem('code') || localStorage.getItem('code') !== code) {
+
+      localStorage.setItem('code', code);
+    }
+  }, [code]);
+
 
   return (
     <>

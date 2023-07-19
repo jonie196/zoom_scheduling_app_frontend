@@ -4,8 +4,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
 
+
 const SendMessage = ({ id }: { id: string }) => {
     const [message, setMessage] = useState('')
+
+    const storedCode = localStorage.getItem('code');
+    console.log(storedCode)
     const sendMessage = async () => {
         const content = message
         const senderId = 1
@@ -17,8 +21,44 @@ const SendMessage = ({ id }: { id: string }) => {
         if (scheduleRegex.test(message) || rescheduleRegex.test(message) || cancelRegex.test(message)) {
             type = 'Meeting';
         }
-        // /conversation/:id/message
-        // POST (content: String, senderId: Number, type: String)
+
+        if (type === 'Meeting') {
+            // const res = await fetch("https://zoom.us/oauth/token", {
+            //     method: "POST",
+            //     headers: {
+            //         "Host": "zoom.us",
+            //         "Content-Type": "application/x-www-form-urlencoded",
+            //         "Authorization": 'Basic ' + process.env.NEXT_PUBLIC_ZOOM_AUTHORIZATION,
+            //     },
+            //     body: JSON.stringify({ grant_type: "authorization_code", code: storedCode, redirect_uri: process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URI}),
+            // })
+            // const data = await res.json();
+            // console.log(data)
+            const clientId = 'your_client_id'; // Replace with your actual Zoom client ID
+            const clientSecret = 'your_client_secret'; // Replace with your actual Zoom client secret
+            const redirectUri = 'your_redirect_uri'; // Replace with your actual Zoom redirect URI
+            const codeVerifier = 'your_code_verifier'; // Replace with your actual code verifier
+
+            const url = 'https://zoom.us/oauth/token';
+
+            const formData = new URLSearchParams();
+            formData.append('code', storedCode);
+            formData.append('grant_type', 'authorization_code');
+            formData.append('redirect_uri', process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URI);
+
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Basic ${process.env.NEXT_PUBLIC_ZOOM_AUTHORIZATION}`,
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Host': 'zoom.us',
+                },
+                body: formData.toString(),
+            });
+
+            const data = await res.json();
+            console.log(data);
+        }
 
         const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + `/conversations/${id}/messages`, {
             method: "POST",
@@ -27,7 +67,9 @@ const SendMessage = ({ id }: { id: string }) => {
             },
             body: JSON.stringify({ content, senderId, type }),
         });
-        window.location.reload();
+
+        // window.location.reload();
+
     }
     return (
         <>

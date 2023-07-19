@@ -5,8 +5,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 // Components
 import SendMessage from './SendMessage';
 
-const getConversation = async (id: string) => {
+const getMessages = async (id: string) => {
+  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + `/conversations/${id}/messages`, { next: { revalidate: 0 } });
+  const data = await res.json();
+  return data.messages;
+}
 
+const getConversation = async (id: string) => {
   const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + `/conversations/${id}`, { next: { revalidate: 0 } });
   const data = await res.json();
   return data.conversation;
@@ -14,8 +19,9 @@ const getConversation = async (id: string) => {
 
 const Page = async (props: any) => {
   const id = props.params.slug as string
+  const messages = await getMessages(id)
   const conversation = await getConversation(id)
-  console.log(conversation)
+  // console.log(messages)
 
   return (
     <>
@@ -30,7 +36,7 @@ const Page = async (props: any) => {
       {/* Chat */}
       <div>
         <div className='flex flex-col gap-4 overflow-auto'>
-          {conversation.messages?.map((message: any) => {
+          {messages?.map((message: any) => {
             return (
               <div key={message.id} className='self-start'>
                 <div className='flex gap-2'>
@@ -51,7 +57,7 @@ const Page = async (props: any) => {
           }
         </div>
         {/* Input */}
-        <SendMessage id={id} />
+        <SendMessage id={id}/>
       </div>
     </>
   )
