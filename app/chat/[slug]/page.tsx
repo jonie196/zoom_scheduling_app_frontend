@@ -6,7 +6,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SendMessage from './SendMessage';
 
 const getMessages = async (id: string) => {
-  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + `/conversations/${id}/messages`, { next: { revalidate: 0 } });
+  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + `/conversations/${id}/messages?page=0`, { next: { revalidate: 0 } });
   const data = await res.json();
   return data.messages;
 }
@@ -17,11 +17,32 @@ const getConversation = async (id: string) => {
   return data.conversation;
 }
 
+// const getAccessToken = async (code:string) => {
+//   const url = 'https://zoom.us/oauth/token';
+//   const redirect_url = process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URI as string
+//   // const storedCode = localStorage.getItem('code') as string
+  
+//   const formData = new URLSearchParams();
+//   formData.append('code', code);
+//   formData.append('grant_type', 'authorization_code');
+//   formData.append('redirect_uri', redirect_url);
+//   const res = await fetch(url, {
+//     method: 'POST',
+//     headers: {
+//       'Authorization': `Basic ${process.env.NEXT_PUBLIC_ZOOM_AUTHORIZATION}`,
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//       'Host': 'zoom.us',
+//     },
+//     body: formData.toString(),
+//   });
+//   return res.json();
+// }
+
 const Page = async (props: any) => {
+
   const id = props.params.slug as string
   const messages = await getMessages(id)
   const conversation = await getConversation(id)
-  // console.log(messages)
 
   return (
     <>
@@ -57,7 +78,7 @@ const Page = async (props: any) => {
           }
         </div>
         {/* Input */}
-        <SendMessage id={id}/>
+        <SendMessage id={id} />
       </div>
     </>
   )

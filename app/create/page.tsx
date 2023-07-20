@@ -4,9 +4,9 @@ import CreateConversation from './createConversation';
 
 
 async function getContacts() {
-    const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + "/contacts");
+    const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + "/contacts?page=1", { next: { revalidate: 60 } });
     const data = await res.json();
-    return data.contacts;
+    return data.data.contacts;
 }
 
 const Page = async () => {

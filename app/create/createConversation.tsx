@@ -29,7 +29,6 @@ const CreateConversation: React.FC<CreateConversationProps> = ({ data }) => {
       body: JSON.stringify({ title, participants }),
     });
     const data = await res.json();
-    console.log(data)
     // nevigate back to home
     window.open('/', '_self');
 }

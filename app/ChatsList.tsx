@@ -5,14 +5,13 @@ type ConversationData = { id: number; title: string; senderName: string; lastMes
 
 async function getConversations() {
 
-  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + "/conversations", { next: { revalidate: 0 } });
+  const res = await fetch(process.env.NEXT_PUBLIC_BACKEND_URL_DEV + "/conversations?page=1", { next: { revalidate: 0 } });
   const data = await res.json();
   return data.conversations;
 }
 
 export const Chats = async () => {
   const conversations: ConversationData = await getConversations();
-  // console.log(conversations)
   return (
     <>
       <div className="w-full flex flex-col gap-2">
